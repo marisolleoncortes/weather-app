@@ -1,0 +1,138 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<script src="https://kit.fontawesome.com/67489fa5ed.js" crossorigin="anonymous"></script>
+	<link rel="preconnect" href="https://fonts.gstatic.com"> 
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+	<title>Weather App</title>
+
+	<style>
+
+		.container {
+			positon: relative;
+			background-color: #0077b6;
+			left: 50%;
+			right: 50%;
+			width: 400px;
+			box-shadow: 6px 7px 8px rgba(0, 0, 0, 0.2);
+			padding-bottom: 20px;
+		}
+		
+		.clear {
+			background: url(https://images.unsplash.com/photo-1566321343730-237ec35e53f3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80);
+			background-size: cover;
+		}
+
+		.cloudy {
+			background: url(https://images.unsplash.com/photo-1523882505971-5c29b55b695c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);
+			background-size: cover;
+			color: #ffffff;
+
+		}
+
+		.sunny {
+			background: url(https://images.unsplash.com/photo-1581224463294-908316338239?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80);
+			background-size: cover;
+		}
+
+		.rain {
+			background: url(https://images.unsplash.com/photo-1433863448220-78aaa064ff47?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1189&q=80);
+			background-size: cover;
+		}
+
+		h1 {
+			color: #ffffff;
+			padding: 25px 0px 20px 0px;
+			font-family: 'Open Sans', sans-serif;
+		}
+
+
+		body {
+			text-align: center;
+
+		}
+
+		.btn-secondary {	
+			background-color: #03045e;
+			border-color: #03045e;
+		}
+
+		.btn-primary hover {
+			background-color: #48cae4;
+		}
+	
+
+	</style>
+</head>
+<body id="body">
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+
+	<h1 id ="conditions"></h1>
+
+
+	<input type="text" placeholder="Zip Code" id="new-location">
+	<button id="change-location" class="btn btn-secondary">Search Your City</button>
+
+	
+
+
+</div>
+</div>
+</div>
+
+	
+
+	<script>
+
+		getWeather(33101);
+
+		document.getElementById("change-location").addEventListener('click', function(){
+			getWeather(document.getElementById("new-location").value);
+		});
+
+		function getWeather(zipcode) {
+
+			var oReq = new XMLHttpRequest();
+			oReq.addEventListener("load", function(event) {
+				let response = JSON.parse(event.currentTarget.response)
+				console.log(response);
+
+
+			let output = document.getElementById("conditions");
+			output.innerText = response.name + " is currently " + response.weather[0].main + " and " + Math.ceil(response.main.temp) + " degrees. ";
+
+			if (response.weather[0].main == 'Clouds') {
+				document.getElementById('body', 'snowman').classList.add('cloudy')
+			}
+
+			if (response.weather[0].main == 'Clear') {
+				document.getElementById('body').classList.add('clear');
+			}
+
+			if (response.weather[0].main == 'Sunny') {
+				document.getElementById('body').classList.add('sunny');
+			}
+
+			if (response.weather[0].main == 'Rain') {
+				document.getElementById('body').classList.add('rain');
+			}
+
+			});
+
+
+		oReq.open("GET", "https://api.openweathermap.org/data/2.5/weather?zip=" + zipcode +",us&appid=ccef2c8c8034982955bec1e0b2a83e36&units=imperial");
+			oReq.send();
+
+		}
+
+	</script>
+
+
+</body>
+</html>
